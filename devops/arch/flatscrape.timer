@@ -1,0 +1,9 @@
+[Unit]
+Description=Flat scraping
+
+[Timer]
+OnStartupSec=10s
+OnUnitInactiveSec=600s
+
+[Install]
+WantedBy=multi-user.target

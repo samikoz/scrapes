@@ -1,0 +1,2 @@
+class OLXParsingException(Exception):
+    pass

@@ -1,0 +1,6 @@
+[Unit]
+Description=Flat scraping
+
+[Service]
+Type=oneshot
+ExecStart=docker run -v flatscrape-db:/scrapes/flatscrape/db --mount type=bind,source=/home/sami/dev/scrapes/flatscrape/logs,target=/scrapes/flatscrape/logs flatscrape
