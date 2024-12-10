@@ -12,6 +12,8 @@ Sends emails with links to the newest unique offers conditioned on filtering cri
  - `logs`
 
 ## How to launch
+first of all need to reset furtive.py file with data required in crawl.py. then:
+
 ### as a script from venv
 needs to have the database initialised. if it's not, run from the outer `flatscrape` directory:
 > $ mkdir -p db
@@ -40,9 +42,7 @@ from the top-level git directory:
 > 
 >$ docker run -v flatscrape-db:/scrapes/flatscrape/db --mount type=bind,source=/home/sami/dev/scrapes/flatscrape/logs,target=/scrapes/flatscrape/logs flatscrape
 
-this is intended to be run by the devops process. 
-WARNING: at the moment this doesn't work, there seem to be issues somewhere in Scrapy:
-`builtins.AttributeError: module 'OpenSSL.SSL' has no attribute 'SSLv3_METHOD'.`
+this is intended to be run by the devops process.
 
 debugging - entering the container
 >$ docker run -it -v flatscrape-db:/scrapes/flatscrape/db --mount type=bind,source=/home/sami/dev/scrapes/flatscrape/logs,target=/scrapes/flatscrape/logs flatscrape bash
@@ -58,6 +58,15 @@ take troublesome url and run the following. need to dupa-debug.
 
 ## TODO
 find some way of reusing containers. at the moment it seems every invocation creates a new one (confirm it)
+
+# Camerascrape
+Scraping cameras from optyczne.pl
+
+Same setup as with flatscrape
+
+## TODO
+Add parsing of the remaining fields
+Setup persistence pipeline
 
 # News
 scraping news from the web

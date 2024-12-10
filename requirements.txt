@@ -1,7 +1,8 @@
-Scrapy==2.6.2
+Scrapy==2.12.0
 html2text==2020.1.16
 requests==2.27.1
 pytest==7.1.1
 betamax==0.8.1
 pytz==2022.1
 attrs==21.4.0
+pyopenssl==24.3.0

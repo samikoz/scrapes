@@ -1,0 +1,2 @@
+class OptyczneParsingException(Exception):
+    pass
