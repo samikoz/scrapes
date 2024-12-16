@@ -7,7 +7,7 @@ from scrapy.spiders import CrawlSpider, Rule
 from scrapy.linkextractors import LinkExtractor
 from camerascrape.types import CameraType
 from camerascrape.items import CameraItem
-from camerascrape.parsers.camera import OptyczneCameraParser
+from camerascrape.parsers.optyczne import OptyczneCameraParser
 
 
 logger = logging.getLogger(__name__)

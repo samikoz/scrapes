@@ -10,5 +10,4 @@ logger = logging.getLogger(__name__)
 
 process = CrawlerProcess(get_project_settings())
 process.crawl("optyczne", typ=CameraType.ALL)
-scrape_timestamp: int = process.crawlers.pop().spider.scrape_timestamp
 process.start()
