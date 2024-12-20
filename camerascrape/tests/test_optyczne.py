@@ -21,19 +21,20 @@ class TestOptyczneParser(BetamaxTestCase):
 
         parsed: CameraItem = self.parser.parse(response)
 
-        # assert parsed["url"] == url
+        assert parsed["url"] == url
         assert parsed["producer"] == "Sony"
         assert parsed["model"] == "A1 II"
         assert parsed["release"] == "2024-11-19"
         assert abs(parsed["pixels"] - 50.1) < 1e-6
-        # assert parsed["resolutions"] == 2001
-        # assert parsed["matrix_size"] == 29
-        # assert parsed["matrix_type"] == 3
-        # assert parsed["iso_range"]
-        # assert parsed["shutter_range"]
-        # assert parsed["bideo_modes"]
-        # assert parsed["weight"]
-        # assert parsed["dimensions"]
+        assert parsed["aspect_ratios"] == ["[3:2]", "[4:3]", "[16:9]", "[1:1]"]
+        assert parsed["resolutions"] == [(8640, 5760), (7680, 5760), (8760, 4864), (5760, 5760)]
+        assert parsed["matrix_size"] == (35.9, 24.0)
+        assert parsed["iso_range"] == (100, 32000)
+        assert parsed["inverse_mechanical_shutter"] == 8000
+        assert parsed["inverse_electronic_shutter"] == 32000
+        assert parsed["video_modes"] == [(7680, 4320, 30), (3840, 2160, 120), (1920, 1080, 120)]
+        assert parsed["weight"] == 743
+        assert parsed["dimensions"] == (136.1, 96.9, 82.9)
 
     def _prepare_response(self, url: str) -> HtmlResponse:
         response = self.session.get(url)
