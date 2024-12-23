@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import date
 from scrapy.http import HtmlResponse
 from betamax import Betamax
 from betamax.fixtures.unittest import BetamaxTestCase
@@ -15,7 +15,7 @@ with Betamax.configure() as config:
 class TestOptyczneParser(BetamaxTestCase):
     parser = OptyczneCameraParser()
 
-    def test_optyczne_parsing(self):
+    def test_parsing_sonya1(self):
         url: str = "https://www.optyczne.pl/2427-Sony_A1_II-specyfikacja_aparatu.html"
         response = self._prepare_response(url)
 
@@ -24,17 +24,51 @@ class TestOptyczneParser(BetamaxTestCase):
         assert parsed["url"] == url
         assert parsed["producer"] == "Sony"
         assert parsed["model"] == "A1 II"
-        assert parsed["release"] == "2024-11-19"
+        assert parsed["release"] == date(2024,11,19)
         assert abs(parsed["pixels"] - 50.1) < 1e-6
-        assert parsed["aspect_ratios"] == ["[3:2]", "[4:3]", "[16:9]", "[1:1]"]
-        assert parsed["resolutions"] == [(8640, 5760), (7680, 5760), (8760, 4864), (5760, 5760)]
+        assert parsed["resolution"] == (8640, 5760)
         assert parsed["matrix_size"] == (35.9, 24.0)
         assert parsed["iso_range"] == (100, 32000)
         assert parsed["inverse_mechanical_shutter"] == 8000
         assert parsed["inverse_electronic_shutter"] == 32000
-        assert parsed["video_modes"] == [(7680, 4320, 30), (3840, 2160, 120), (1920, 1080, 120)]
         assert parsed["weight"] == 743
         assert parsed["dimensions"] == (136.1, 96.9, 82.9)
+
+    def test_parsing_pentaxk3(self):
+        url: str = "https://www.optyczne.pl/2390-Pentax_K-3_III_Monochrome-specyfikacja_aparatu.html"
+        response = self._prepare_response(url)
+
+        parsed: CameraItem = self.parser.parse(response)
+
+        assert parsed["url"] == url
+        assert parsed["producer"] == "Pentax"
+        assert parsed["model"] == "K-3 III Monochrome"
+        assert parsed["release"] == date(2023,4,13)
+        assert abs(parsed["pixels"] - 25.7) < 1e-6
+        assert parsed["resolution"] == (6192, 4128)
+        assert parsed["matrix_size"] == (23.3, 15.5)
+        assert parsed["iso_range"] == (200, 1638400)
+        assert parsed["inverse_mechanical_shutter"] is None
+        assert parsed["inverse_electronic_shutter"] == 8000
+        assert parsed["weight"] == 820
+        assert parsed["dimensions"] == (134.5, 103.5, 73.5)
+
+    def test_parsing_panasoniclumix(self):
+        url: str = "https://www.optyczne.pl/2428-Panasonic_Lumix_DC-G97-specyfikacja_aparatu.html"
+        response = self._prepare_response(url)
+
+        parsed: CameraItem = self.parser.parse(response)
+
+        assert parsed["matrix_size"] == (17.3, 13)
+
+    def test_parsing_sigmafpl(self):
+        url: str = "https://www.optyczne.pl/2346-Sigma_fp_L-specyfikacja_aparatu.html"
+        response = self._prepare_response(url)
+
+        parsed: CameraItem = self.parser.parse(response)
+
+        assert parsed["resolution"] == (9520, 6328)
+        assert parsed["inverse_electronic_shutter"] == 8000
 
     def _prepare_response(self, url: str) -> HtmlResponse:
         response = self.session.get(url)

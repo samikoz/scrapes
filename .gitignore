@@ -3,4 +3,5 @@
 __pycache__
 
 flatscrape.db
+camerascrape.db
 logs

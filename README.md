@@ -62,10 +62,9 @@ find some way of reusing containers. at the moment it seems every invocation cre
 # Camerascrape
 Scraping cameras from optyczne.pl
 
-Same setup as with flatscrape
+Not launched using docker but with a Bash script `crawl_lexicon.sh`.
 
 ## TODO
-Add parsing of the remaining fields
 Setup persistence pipeline
 
 # News

@@ -3,6 +3,7 @@ class OptyczneParsingException(Exception):
 
 
 class OptyczneSubparserException(Exception):
-    def __init__(self, parsee: str) -> None:
-        super(parsee)
+    def __init__(self, parsee: str, exc: Exception) -> None:
+        super().__init__(parsee)
         self.parsee: str = parsee
+        self.exception = exc

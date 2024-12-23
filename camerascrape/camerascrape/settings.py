@@ -47,9 +47,9 @@ DEFAULT_REQUEST_HEADERS = {
 #    'scrapy.extensions.telnet.TelnetConsole': None,
 # }
 
-# ITEM_PIPELINES = {
-#     'camerascrape.pipelines.PersistencePipeline': 400
-# }
+ITEM_PIPELINES = {
+    'camerascrape.pipelines.PersistencePipeline': 400
+}
 
 # AUTOTHROTTLE_ENABLED = True
 # AUTOTHROTTLE_START_DELAY = 5

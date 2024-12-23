@@ -8,14 +8,14 @@ class CameraItem(scrapy.Item):
     release = scrapy.Field()
     pixels = scrapy.Field()
     aspect_ratios = scrapy.Field()
-    resolutions = scrapy.Field()
+    resolution = scrapy.Field()
     matrix_size = scrapy.Field()
     iso_range = scrapy.Field()
     inverse_mechanical_shutter = scrapy.Field()
     inverse_electronic_shutter = scrapy.Field()
-    video_modes = scrapy.Field()
     weight = scrapy.Field()
     dimensions = scrapy.Field()
+    exceptions = scrapy.Field()
 
 
 class CameraOffer(scrapy.Item):
