@@ -70,6 +70,32 @@ class TestOptyczneParser(BetamaxTestCase):
         assert parsed["resolution"] == (9520, 6328)
         assert parsed["inverse_electronic_shutter"] == 8000
 
+    def test_parsing_canoneos850(self):
+        url: str = "https://www.optyczne.pl/2300-Canon_EOS_850D-specyfikacja_aparatu.html"
+        response = self._prepare_response(url)
+
+        parsed: CameraItem = self.parser.parse(response)
+
+        assert parsed["resolution"] == (6000, 4000)
+
+    def test_parsing_leicas(self):
+        url: str = "https://www.optyczne.pl/2028-Leica_S_(Typ_007)-specyfikacja_aparatu.html"
+        response = self._prepare_response(url)
+
+        parsed: CameraItem = self.parser.parse(response)
+
+        assert parsed["resolution"] == (7500, 5000)
+        assert parsed["inverse_mechanical_shutter"] == 4000
+        assert parsed["inverse_electronic_shutter"] is None
+
+    def test_parsing_nikond5500(self):
+        url: str = "https://www.optyczne.pl/1935-Nikon_D5500-specyfikacja_aparatu.html"
+        response = self._prepare_response(url)
+
+        parsed: CameraItem = self.parser.parse(response)
+
+        assert parsed["iso_range"] == (100, 25600)
+
     def _prepare_response(self, url: str) -> HtmlResponse:
         response = self.session.get(url)
         scrapy_response = HtmlResponse(body=response.content, url=url)

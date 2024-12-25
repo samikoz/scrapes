@@ -1,9 +1,13 @@
 import sqlite3
 import itertools
+import logging
 from typing import Optional, List, Any
 
 from camerascrape.items import CameraItem
 import camerascrape.settings
+
+
+logger = logging.getLogger(__name__)
 
 
 class PersistencePipeline:
@@ -57,6 +61,7 @@ class PersistencePipeline:
         values_part: str = "VALUES " + (('(' + ('?,'*self.column_count[:-1]) + '),') * len(self.items))[:-1]
         conflict_part: str = " ON CONFLICT(producer,model) DO NOTHING"
 
+        logger.debug(f"persisting {len(self.items)} items")
         self.cursor.execute(
             table_part + values_part + conflict_part,
             list(itertools.chain(*[self._unpack_item(it) for it in self.items]))
