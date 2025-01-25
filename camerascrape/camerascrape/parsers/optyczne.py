@@ -44,7 +44,6 @@ class OptyczneCameraParser:
 
         item["url"] = response.url
         if len(item["exceptions"]) > 0:
-            exc_message: str = f"exceptions parsing {response.url}:\n" + '\n'.join(f" {exc.parsee}:{exc.exception}" for exc in item["exceptions"])
+            exc_message: str = f"exceptions parsing {response.url}:\n" + '\n'.join(f" {exc.parsed_fields}:{exc.exception}" for exc in item["exceptions"])
             logger.warning(exc_message)
-            # raise OptyczneParsingException(response.url)
         return item

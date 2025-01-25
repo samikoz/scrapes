@@ -96,6 +96,22 @@ class TestOptyczneParser(BetamaxTestCase):
 
         assert parsed["iso_range"] == (100, 25600)
 
+    def test_parsing_samsunngx10(self):
+        url: str = "https://www.optyczne.pl/1041-Samsung_NX10-specyfikacja_aparatu.html"
+        response = self._prepare_response(url)
+
+        parsed: CameraItem = self.parser.parse(response)
+
+        assert parsed["weight"] == 499
+
+    def test_parsing_pentaxq(self):
+        url: str = "https://www.optyczne.pl/1389-Pentax_Q-specyfikacja_aparatu.html"
+        response = self._prepare_response(url)
+
+        parsed: CameraItem = self.parser.parse(response)
+
+        assert parsed["matrix_size"] == (6.16, 4.62)
+
     def _prepare_response(self, url: str) -> HtmlResponse:
         response = self.session.get(url)
         scrapy_response = HtmlResponse(body=response.content, url=url)

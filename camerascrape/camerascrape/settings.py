@@ -6,7 +6,7 @@ BOT_NAME = 'camerascrape'
 
 CURRENT_TIME: datetime = datetime.now()
 LOG_FILE = f'logs/{CURRENT_TIME.month:02d}{CURRENT_TIME.day:02d}:{CURRENT_TIME.hour:02d}{CURRENT_TIME.minute:02d}.log'
-LOG_LEVEL = 'DEBUG'
+LOG_LEVEL = 'INFO'
 
 SPIDER_MODULES = ['camerascrape.spiders']
 NEWSPIDER_MODULE = 'camerascrape.spiders'

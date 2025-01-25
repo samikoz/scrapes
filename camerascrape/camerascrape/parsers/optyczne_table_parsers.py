@@ -2,8 +2,7 @@ import re
 from abc import ABC, abstractmethod
 
 from datetime import date
-from functools import wraps
-from typing import List, Tuple, Callable, Any, NewType, Optional, Iterable
+from typing import List, Tuple, Any, NewType, Optional, Iterable
 from camerascrape.exceptions import OptyczneSubparserException
 
 
@@ -14,7 +13,8 @@ resolution_pattern: re.Pattern = re.compile(r'\d,?\d{3} ?[x×] ?\d,?\d{3}')
 matrix_pattern: re.Pattern = re.compile(r'(\d+(?:\.\d)?)[ a-z]{0,4}[x×] ?(\d+(?:\.\d)?)')
 iso_range_pattern: re.Pattern = re.compile(r'\d+ ?[-–] ?\d+')
 shutter_speed_pattern: re.Pattern = re.compile(r'1/(\d+)')
-weight_pattern: re.Pattern = re.compile(r'\d+(?:\.\d)?')
+weight_pattern: re.Pattern = re.compile(r'\d+')
+dimension_pattern: re.Pattern = re.compile(r'\d+(?:\.\d)?')
 mechanical_shutter_pattern: re.Pattern = re.compile(r'mechan', re.I)
 electronic_shutter_pattern: re.Pattern = re.compile(r'elektron', re.I)
 
@@ -81,6 +81,7 @@ class MatrixSizeParser(OptyczneSingleFieldParser):
         return 'matrix_size'
 
     def _parse_table_row(self, row: str) -> Tuple[float, float]:
+        # if fails search for: https://fotoblogia.pl/rodzaje-i-wielkosci-matryc-wszystko-co-powinienes-wiedziec-poradnik,6793597927618689a
         match = matrix_pattern.search(row)
         return float(match.group(1)), float(match.group(2))
 
@@ -126,4 +127,4 @@ class DimensionsParser(OptyczneSingleFieldParser):
         return 'dimensions'
 
     def _parse_table_row(self, row: str) -> Tuple[float, float, float]:
-        return tuple(float(dim) for dim in re.findall(weight_pattern, row))
+        return tuple(float(dim) for dim in re.findall(dimension_pattern, row))
