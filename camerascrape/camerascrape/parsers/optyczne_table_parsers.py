@@ -8,9 +8,9 @@ from camerascrape.exceptions import OptyczneSubparserException
 
 ParsedFieldName = NewType('ParsedFieldName', str)
 
-
 resolution_pattern: re.Pattern = re.compile(r'\d,?\d{3} ?[x×] ?\d,?\d{3}')
-matrix_pattern: re.Pattern = re.compile(r'(\d+(?:\.\d)?)[ a-z]{0,4}[x×] ?(\d+(?:\.\d)?)')
+matrix_pattern: re.Pattern = re.compile(r'(\d+(?:\.\d)?)\s*[a-z]{0,2}\s?[x×]\s?(\d+(?:\.\d)?)')
+inches_pattern: re.Pattern = re.compile(r'([0-9/.]+)\scal')
 iso_range_pattern: re.Pattern = re.compile(r'\d+ ?[-–] ?\d+')
 shutter_speed_pattern: re.Pattern = re.compile(r'1/(\d+)')
 weight_pattern: re.Pattern = re.compile(r'\d+')
@@ -35,6 +35,8 @@ class OptyczneSingleFieldParser(OptyczneTableParser):
         pass
 
     def parse(self, row: str) -> Iterable[Tuple[ParsedFieldName, Any]]:
+        if 'brak danych' in row:
+            return [(ParsedFieldName(self._get_parsed_fieldname()), None)]
         try:
             return [(ParsedFieldName(self._get_parsed_fieldname()), self._parse_table_row(row))]
         except Exception as e:
@@ -81,9 +83,13 @@ class MatrixSizeParser(OptyczneSingleFieldParser):
         return 'matrix_size'
 
     def _parse_table_row(self, row: str) -> Tuple[float, float]:
-        # if fails search for: https://fotoblogia.pl/rodzaje-i-wielkosci-matryc-wszystko-co-powinienes-wiedziec-poradnik,6793597927618689a
-        match = matrix_pattern.search(row)
-        return float(match.group(1)), float(match.group(2))
+        if sensor_size_match := matrix_pattern.search(row):
+            return float(sensor_size_match.group(1)), float(sensor_size_match.group(2))
+        if inches_match := inches_pattern.search(row):
+            match inches_match.group(1):
+                case '1/2.3':
+                    return 6.16, 4.62
+
 
 
 class ISOParser(OptyczneSingleFieldParser):
@@ -91,7 +97,10 @@ class ISOParser(OptyczneSingleFieldParser):
         return 'iso_range'
 
     def _parse_table_row(self, row: str) -> Tuple[float, float]:
-        return tuple(int(iso) for iso in re.split(r'[-–]', re.search(iso_range_pattern, row).group()))
+        if iso_range_match := re.search(iso_range_pattern, row):
+            return tuple(int(iso) for iso in re.split(r'[-–]', iso_range_match.group()))
+        isos: List[int] = [int(iso) for iso in re.findall(r'\d+', row)]
+        return min(isos), max(isos)
 
 
 class ShutterParser(OptyczneTableParser):
@@ -119,7 +128,9 @@ class WeightParser(OptyczneSingleFieldParser):
         return 'weight'
 
     def _parse_table_row(self, row: str) -> int:
-        return max(int(weight) for weight in re.findall(weight_pattern, row))
+        weights: List[str] = re.findall(weight_pattern, row)
+        if len(weights) > 0:
+            return max(int(weight) for weight in weights)
 
 
 class DimensionsParser(OptyczneSingleFieldParser):

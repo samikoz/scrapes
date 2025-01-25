@@ -1,5 +1,5 @@
 import logging
-from typing import Dict, Any, Tuple, Iterable
+from typing import Dict
 
 from camerascrape.items import CameraItem
 from camerascrape.exceptions import OptyczneSubparserException

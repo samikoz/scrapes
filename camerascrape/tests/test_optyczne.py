@@ -112,6 +112,30 @@ class TestOptyczneParser(BetamaxTestCase):
 
         assert parsed["matrix_size"] == (6.16, 4.62)
 
+    def test_parsing_panasonic_lumix_s5ii(self):
+        url: str = "https://www.optyczne.pl/2377-Panasonic_Lumix_S5_II-specyfikacja_aparatu.html"
+        response = self._prepare_response(url)
+
+        parsed: CameraItem = self.parser.parse(response)
+
+        assert parsed["matrix_size"] == (35.6, 23.8)
+
+    def test_parsing_pentax_istdl2(self):
+        url: str = "https://www.optyczne.pl/153-Pentax_*ist_DL2-specyfikacja_aparatu.html"
+        response = self._prepare_response(url)
+
+        parsed: CameraItem = self.parser.parse(response)
+
+        assert parsed["iso_range"] == (200, 3200)
+
+    def test_parsing_pentax_ixx(self):
+        url: str = "https://www.optyczne.pl/1257-Sigma_SD1-specyfikacja_aparatu.html"
+        response = self._prepare_response(url)
+
+        parsed: CameraItem = self.parser.parse(response)
+
+        assert parsed["iso_range"] == (200, 3200)
+
     def _prepare_response(self, url: str) -> HtmlResponse:
         response = self.session.get(url)
         scrapy_response = HtmlResponse(body=response.content, url=url)
